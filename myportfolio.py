@@ -1,9 +1,10 @@
 import streamlit as st
-import base64
 import os
+import base64
 
-# Page config (hide menu & footer)
-st.set_page_config(page_title="Obed Feni | Portfolio", page_icon="📄", layout="wide")
+st.set_page_config(page_title="Obed Feni - Portfolio", page_icon="📄", layout="wide")
+
+# Hide Streamlit menu & footer
 hide_streamlit_style = """
     <style>
     #MainMenu {visibility: hidden;}
@@ -13,47 +14,13 @@ hide_streamlit_style = """
 """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
-# Background & theme
-st.markdown("""
-<style>
-    .main {
-        background: linear-gradient(135deg, #e8f0ff, #ffffff);
-        padding: 2rem;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        color: #2c3e50;
-    }
-    .section {
-        background-color: #ffffffcc;
-        padding: 2rem;
-        border-radius: 12px;
-        margin-bottom: 2rem;
-        box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-    }
-    .section h2 {
-        color: #1e3d7b;
-        border-left: 4px solid #1e90ff;
-        padding-left: 0.6rem;
-        margin-bottom: 1rem;
-    }
-    .card {
-        background: #f9fbff;
-        padding: 1.5rem;
-        border-radius: 12px;
-        margin-bottom: 1rem;
-        box-shadow: 0 3px 12px rgba(0,0,0,0.06);
-    }
-    .footer {
-        text-align: center;
-        margin-top: 3rem;
-        background-color: #1e3d7b;
-        color: white;
-        padding: 1rem;
-        border-radius: 8px;
-    }
-</style>
-""", unsafe_allow_html=True)
-
 # Functions
+def list_files(category):
+    folder = f"documents/{category}"
+    if not os.path.exists(folder):
+        return []
+    return [os.path.join(folder, f) for f in os.listdir(folder)]
+
 def show_pdf(file_path):
     with open(file_path, "rb") as f:
         base64_pdf = base64.b64encode(f.read()).decode('utf-8')
@@ -69,48 +36,92 @@ def create_download_button(file_path, button_text):
             mime="application/octet-stream"
         )
 
+# Custom styling
+st.markdown("""
+<style>
+    .main {
+        background-color: #f0f6ff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #2c3e50;
+    }
+    .header {
+        text-align: center;
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+    }
+    .header h1 {
+        color: #1e3d7b;
+        font-size: 2.5rem;
+    }
+    .header p {
+        color: #4a6572;
+        font-size: 1.1rem;
+    }
+    .section {
+        background-color: #ffffff;
+        padding: 2rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+    .section h2 {
+        color: #1e3d7b;
+        border-left: 4px solid #1e90ff;
+        padding-left: 0.6rem;
+        margin-bottom: 1rem;
+    }
+    .footer {
+        text-align: center;
+        margin-top: 3rem;
+        padding: 1rem;
+        background-color: #1e3d7b;
+        color: white;
+        border-radius: 8px;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 # Header
-st.markdown('<div class="section">', unsafe_allow_html=True)
+st.markdown('<div class="header">', unsafe_allow_html=True)
 st.title("Obed Tenkorang Feni")
-st.markdown("### 📂 Professional Portfolio")
-st.markdown("Welcome to my portfolio. Browse my certificates, testimonials, and professional achievements below.")
+st.markdown("<p>Welcome to my professional portfolio. Explore my certificates, testimonials, and achievements.</p>", unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
 
-# Certificates
+# Certificates Section
 st.markdown('<div class="section">', unsafe_allow_html=True)
 st.header("📜 Certificates")
-cert_folder = "documents/certificates"
-if not os.path.exists(cert_folder) or not os.listdir(cert_folder):
-    st.info("No certificates uploaded yet.")
+cert_files = list_files("certificates")
+if not cert_files:
+    st.info("No certificates available yet.")
 else:
-    for file in os.listdir(cert_folder):
-        path = os.path.join(cert_folder, file)
-        with st.expander(file.replace("_", " ").title()):
-            if file.endswith(".pdf"):
-                show_pdf(path)
-            elif file.endswith((".png", ".jpg", ".jpeg")):
-                st.image(path)
-            create_download_button(path, f"⬇️ Download {file}")
+    for file in cert_files:
+        filename = os.path.basename(file)
+        st.subheader(filename)
+        if file.endswith(".pdf"):
+            show_pdf(file)
+        elif file.endswith((".png", ".jpg", ".jpeg")):
+            st.image(file, use_container_width=True)
+        create_download_button(file, f"⬇️ Download {filename}")
 st.markdown('</div>', unsafe_allow_html=True)
 
-# Testimonials
+# Testimonials Section
 st.markdown('<div class="section">', unsafe_allow_html=True)
 st.header("🌟 Testimonials")
-test_folder = "documents/testimonials"
-if not os.path.exists(test_folder) or not os.listdir(test_folder):
-    st.info("No testimonials uploaded yet.")
+test_files = list_files("testimonials")
+if not test_files:
+    st.info("No testimonials available yet.")
 else:
-    for file in os.listdir(test_folder):
-        path = os.path.join(test_folder, file)
-        st.markdown(f"""
-        <div class="card">
-            <p><strong>{file.replace("_", " ").title()}</strong></p>
-        </div>
-        """, unsafe_allow_html=True)
-        create_download_button(path, f"⬇️ Download {file}")
+    for file in test_files:
+        filename = os.path.basename(file)
+        st.subheader(filename)
+        if file.endswith(".pdf"):
+            show_pdf(file)
+        elif file.endswith((".png", ".jpg", ".jpeg")):
+            st.image(file, use_container_width=True)
+        create_download_button(file, f"⬇️ Download {filename}")
 st.markdown('</div>', unsafe_allow_html=True)
 
-# Contact
+# Contact Section
 st.markdown('<div class="section">', unsafe_allow_html=True)
 st.header("📞 Contact Information")
 st.markdown("""
@@ -122,4 +133,6 @@ st.markdown("""
 st.markdown('</div>', unsafe_allow_html=True)
 
 # Footer
-st.markdown('<div class="footer">© 2025 Obed Feni — Professional Portfolio</div>', unsafe_allow_html=True)
+st.markdown('<div class="footer">', unsafe_allow_html=True)
+st.markdown("© 2025 Obed Feni — Professional Portfolio. All rights reserved.")
+st.markdown('</div>', unsafe_allow_html=True)
