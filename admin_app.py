@@ -26,19 +26,24 @@ def save_uploaded_file(uploaded_file, category, title):
 st.title("⚙️ Admin Dashboard")
 st.markdown("Upload and manage your certificates and testimonials.")
 
-# Upload forms
+# Upload Certificate Form
 with st.expander("➕ Add Certificate"):
-    cert_title = st.text_input("Certificate Title")
-    cert_file = st.file_uploader("Upload Certificate", type=['pdf', 'png', 'jpg', 'jpeg', 'docx'])
-    if st.button("Save Certificate") and cert_file and cert_title:
-        save_uploaded_file(cert_file, "certificates", cert_title)
-        st.success(f"✅ {cert_title} added!")
+    with st.form("certificate_form", clear_on_submit=True):
+        cert_title = st.text_input("Certificate Title")
+        cert_file = st.file_uploader("Upload Certificate", type=['pdf', 'png', 'jpg', 'jpeg', 'docx'])
+        cert_submit = st.form_submit_button("Save Certificate")
+        if cert_submit and cert_file and cert_title:
+            save_uploaded_file(cert_file, "certificates", cert_title)
+            st.success(f"✅ {cert_title} added successfully!")
 
+# Upload Testimonial Form
 with st.expander("➕ Add Testimonial"):
-    test_title = st.text_input("Testimonial Name/Source")
-    test_file = st.file_uploader("Upload Testimonial", type=['pdf', 'png', 'jpg', 'jpeg', 'docx'])
-    if st.button("Save Testimonial") and test_file and test_title:
-        save_uploaded_file(test_file, "testimonials", test_title)
-        st.success(f"🌟 {test_title} added!")
+    with st.form("testimonial_form", clear_on_submit=True):
+        test_title = st.text_input("Testimonial Name/Source")
+        test_file = st.file_uploader("Upload Testimonial", type=['pdf', 'png', 'jpg', 'jpeg', 'docx'])
+        test_submit = st.form_submit_button("Save Testimonial")
+        if test_submit and test_file and test_title:
+            save_uploaded_file(test_file, "testimonials", test_title)
+            st.success(f"🌟 {test_title} added successfully!")
 
 st.info("Uploaded files are instantly available on your public portfolio page.")
