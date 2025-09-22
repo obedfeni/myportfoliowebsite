@@ -22,6 +22,18 @@ def save_uploaded_file(uploaded_file, category, title):
         f.write(uploaded_file.getbuffer())
     return file_path
 
+def list_files(category):
+    folder = f"documents/{category}"
+    if not os.path.exists(folder):
+        return []
+    return [os.path.join(folder, f) for f in os.listdir(folder)]
+
+def delete_file(file_path):
+    if os.path.exists(file_path):
+        os.remove(file_path)
+        return True
+    return False
+
 # Header
 st.title("⚙️ Admin Dashboard")
 st.markdown("Upload and manage your certificates and testimonials.")
@@ -46,4 +58,34 @@ with st.expander("➕ Add Testimonial"):
             save_uploaded_file(test_file, "testimonials", test_title)
             st.success(f"🌟 {test_title} added successfully!")
 
-st.info("Uploaded files are instantly available on your public portfolio page.")
+# Show Uploaded Certificates
+st.subheader("📜 Certificates")
+cert_files = list_files("certificates")
+if cert_files:
+    for file in cert_files:
+        col1, col2 = st.columns([4,1])
+        with col1:
+            st.write(os.path.basename(file))
+        with col2:
+            if st.button("❌ Delete", key=file):
+                delete_file(file)
+                st.success(f"Deleted {os.path.basename(file)}")
+                st.rerun()
+else:
+    st.info("No certificates uploaded yet.")
+
+# Show Uploaded Testimonials
+st.subheader("🌟 Testimonials")
+test_files = list_files("testimonials")
+if test_files:
+    for file in test_files:
+        col1, col2 = st.columns([4,1])
+        with col1:
+            st.write(os.path.basename(file))
+        with col2:
+            if st.button("❌ Delete", key=file):
+                delete_file(file)
+                st.success(f"Deleted {os.path.basename(file)}")
+                st.rerun()
+else:
+    st.info("No testimonials uploaded yet.")
