@@ -125,7 +125,7 @@ st.markdown('</div>', unsafe_allow_html=True)
 st.markdown('<div class="section">', unsafe_allow_html=True)
 st.header("📞 Contact Information")
 st.markdown("""
-- **Email:** obedfeni23@gmail.com  
+- **Email:** obedfeni@gmail.com  
 - **Phone:** +233541468102  
 - **LinkedIn:** [linkedin.com/in/obedfeni](https://linkedin.com/in/obedfeni)  
 - **GitHub:** [github.com/obed_feni](https://github.com/obed_feni)  
