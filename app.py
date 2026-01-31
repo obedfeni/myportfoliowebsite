@@ -5,7 +5,7 @@ import os
 
 # Page configuration
 st.set_page_config(
-    page_title="Feni Obed Tenkorang | Electrical Engineer",
+    page_title="Feni Obed Tenkorang | Electrical & Electronics Graduate",
     page_icon="⚡",
     layout="wide",
     initial_sidebar_state="collapsed"
@@ -561,7 +561,7 @@ def main():
     st.markdown("""
     <div class="footer">
         <p>© 2024 Feni Obed Tenkorang. Built with Streamlit ⚡</p>
-        <p style="font-size: 0.9rem; margin-top: 0.5rem;">Electrical Engineer | Hardware & Systems Technician</p>
+        <p style="font-size: 0.9rem; margin-top: 0.5rem;">Electrical & Electronics Graduate | </p>
     </div>
     """, unsafe_allow_html=True)
 
